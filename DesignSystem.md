@@ -53,71 +53,28 @@ Use semantic utilities such as `bg-bg-main`, `bg-card-bg`,
 `text-text-primary`, `border-border-main`, and `bg-brand-active`. Do not
 hardcode hex values inside components when a token exists.
 
-### 2.2 Current theme tokens
+### 2.2 Unified `--theme-*` Variables
 
-  --------------------------------------------------------------------------------
-  Token                      Light             Dark              Intended use
-  -------------------------- ----------------- ----------------- -----------------
-  `--theme-bg-main`          `#f8f8f6`         `#0d0e10`         Main page canvas
+The Dokkan-2 color system uses a single unified set of `--theme-*` CSS variables defined in `src/index.css` under `:root` (Light Mode) and `.dark` (Dark Mode), mapped directly into Tailwind CSS v4 `@theme`.
 
-  `--theme-card-bg`          `#ffffff`         `#161719`         Cards, panels,
-                                                                 menus, and
-                                                                 elevated surfaces
-
-  `--theme-input-bg`         `#f0f0ed`         `#1a1b1d`         Inputs, search
-                                                                 fields, and
-                                                                 subtle inset
-                                                                 surfaces
-
-  `--theme-text-primary`     `#1a1b1d`         `#f2f2f0`         Headings and
-                                                                 primary content
-
-  `--theme-text-secondary`   `#5a5955`         `#c9c8c3`         Descriptions,
-                                                                 metadata, helper
-                                                                 text, and
-                                                                 secondary icons
-
-  `--theme-brand-active`     `#b88322`         `#e3b158`         Primary brand
-                                                                 accent, selected
-                                                                 states, key
-                                                                 actions
-
-  `--theme-brand-hover`      `#d9a441`         `#d9a441`         Brand hover state
-
-  `--theme-active-bg`        `#fcf4e4`         `#332813`         Subtle
-                                                                 selected/active
-                                                                 surface
-
-  `--theme-border-main`      `#e5e5e0`         `#2a2b2e`         Borders and
-                                                                 dividers
-
-  `--theme-disabled`         `#d4d3ce`         `#3a3b3e`         Disabled controls
-                                                                 and surfaces
-  --------------------------------------------------------------------------------
-
-### 2.3 Semantic status colors
-
-  --------------------------------------------------------------------------------
-  Token                      Light             Dark              Use
-  -------------------------- ----------------- ----------------- -----------------
-  `--theme-status-success`   `#10b981`         `#34d399`         Successful
-                                                                 actions,
-                                                                 completed states,
-                                                                 valid feedback
-
-  `--theme-status-warning`   `#f59e0b`         `#fbbf24`         Pending states
-                                                                 and caution
-
-  `--theme-status-danger`    `#c6604f`         `#c6604f`         Errors,
-                                                                 destructive
-                                                                 actions, failed
-                                                                 states
-
-  `--theme-status-info`      `#3b82f6`         `#60a5fa`         Informational
-                                                                 messages and
-                                                                 neutral progress
-                                                                 states
-  --------------------------------------------------------------------------------
+  --------------------------------------------------------------------------------------------------------------------------------------
+  Variable                   Light Hex         Dark Hex          Tailwind Utility        Intended Usage
+  -------------------------- ----------------- ----------------- ----------------------- -----------------------------------------------
+  `--theme-bg-main`          `#f7f2ed`         `#1a1513`         `bg-bg-main`            Main page background canvas
+  `--theme-card-bg`          `#ded8d1`         `#1f1a18`         `bg-card-bg`            Cards, panels, and elevated surfaces
+  `--theme-input-bg`         `#eadecf`         `#2a221e`         `bg-input-bg`           Input fields and card hover backgrounds
+  `--theme-text-primary`     `#2a2421`         `#f3ece7`         `text-text-primary`     Primary headings, key labels, and body text
+  `--theme-text-secondary`   `#7a6f68`         `#a0948c`         `text-text-secondary`   Secondary text, descriptions, metadata, icons
+  `--theme-brand-active`     `#c2a38e`         `#e8c39e`         `text-brand-active`     Primary brand gold accent, active states
+  `--theme-brand-hover`      `#b08f79`         `#f3d4b6`         `bg-brand-hover`        Brand accent hover state
+  `--theme-active-bg`        `#ece3db`         `#2e2622`         `bg-active-bg`          Active navigation item / highlighted surface
+  `--theme-border-main`      `#e4dcd5`         `#38302c`         `border-border-main`    Borders, dividers, and card outlines
+  `--theme-disabled`         `#d8d0c8`         `#3a322c`         `bg-disabled`           Disabled controls and subdued surfaces
+  `--theme-status-success`   `#10b981`         `#34d399`         `text-status-success`   Successful actions, valid states
+  `--theme-status-warning`   `#f59e0b`         `#fbbf24`         `text-status-warning`   Cautionary notices and pending states
+  `--theme-status-danger`    `#c6604f`         `#c6604f`         `text-status-danger`    Errors, alerts, and destructive actions
+  `--theme-status-info`      `#3b82f6`         `#60a5fa`         `text-status-info`      Informational messages and progress states
+  --------------------------------------------------------------------------------------------------------------------------------------
 
 ### 2.4 Color usage rules
 
@@ -145,15 +102,11 @@ hardcode hex values inside components when a token exists.
 
 ### 3.1 Font family
 
-The current theme declares:
+The project uses the system font stack as declared in the Dokkan reference:
 
-``` css
---font-sans: "Plus Jakarta Sans", sans-serif;
+```css
+font-family: system-ui, -apple-system, sans-serif;
 ```
-
-`html` uses `var(--font-sans)`. Confirm that the font is actually loaded
-by the application before relying on it; otherwise the browser may use
-its fallback.
 
 ### 3.2 Typography hierarchy
 
