@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Sun, Moon, Menu, X, ArrowUpRight, User } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../ui/logo";
-import { getPreferredTheme, setTheme } from "../../utils/theme";
+import useTheme from "../hooks/useTheme";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -13,10 +13,17 @@ const navLinks = [
   { label: "Wishlist", path: "/wishlist" },
 ];
 
-export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
-  const [isDark, setIsDark] = useState(() => getPreferredTheme() === "dark");
+export default function Navbar({
+  isLoggedIn = false,
+  user = null,
+  onLogout,
+}) {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,7 +38,9 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -42,6 +51,7 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
     if (target === "/") {
       return currentPath === "/";
     }
+
     return currentPath === target || currentPath.startsWith(`${target}/`);
   };
 
@@ -56,7 +66,11 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
       {/* Container */}
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
         {/* Brand Logo */}
-        <NavLink to="/" className="flex items-center cursor-pointer" aria-label="Dokkan Home">
+        <NavLink
+          to="/"
+          className="flex items-center cursor-pointer"
+          aria-label="Dokkan Home"
+        >
           <Logo markClassName="h-10" textClassName="h-6" />
         </NavLink>
 
@@ -75,14 +89,19 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
                   <motion.div
                     layoutId="active-pill"
                     className="absolute inset-0 pointer-events-none"
-                    transition={{ type: "spring", duration: 0.5, bounce: 0.2 }}
+                    transition={{
+                      type: "spring",
+                      duration: 0.5,
+                      bounce: 0.2,
+                    }}
                   >
                     <div className="absolute -top-[1.5px] left-1/2 h-[3.5px] w-6 -translate-x-1/2 rounded-full bg-brand-active shadow-[0_0_10px_var(--theme-brand-active)] z-20" />
 
                     <div
                       className="absolute top-0 left-1/2 h-full w-full -translate-x-1/2 z-10"
                       style={{
-                        clipPath: "polygon(35% 0%, 65% 0%, 95% 100%, 5% 100%)",
+                        clipPath:
+                          "polygon(35% 0%, 65% 0%, 95% 100%, 5% 100%)",
                         background:
                           "linear-gradient(to bottom, color-mix(in srgb, var(--theme-brand-active) 70%, transparent) 0%, color-mix(in srgb, var(--theme-brand-active) 15%, transparent) 75%, transparent 100%)",
                       }}
@@ -111,24 +130,32 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
           {/* Theme Toggle Button */}
           <button
             type="button"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            onClick={() => {
-              const next = !isDark;
-              setIsDark(next);
-              setTheme(next ? "dark" : "light");
-            }}
+            aria-label={
+              isDark ? "Switch to light mode" : "Switch to dark mode"
+            }
+            onClick={toggleTheme}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-border-main bg-bg-main/70 dark:bg-card-bg/70 text-text-primary hover:bg-input-bg dark:hover:bg-active-bg transition-all shadow-sm backdrop-blur-sm cursor-pointer"
           >
-            {isDark ? <Sun className="h-4 w-4 text-brand-active" /> : <Moon className="h-4 w-4" />}
+            {isDark ? (
+              <Sun className="h-4 w-4 text-brand-active" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </button>
 
           {/* User Profile / Login */}
           {isLoggedIn ? (
             <div className="flex items-center gap-2 rounded-full border border-border-main bg-bg-main/70 dark:bg-card-bg/70 px-4 py-2 text-xs font-semibold text-text-primary shadow-sm">
-              <NavLink to="/profile" className="flex items-center gap-1.5 hover:underline">
+              <NavLink
+                to="/profile"
+                className="flex items-center gap-1.5 hover:underline"
+              >
                 <User className="h-3.5 w-3.5 text-brand-active" />
-                <span className="max-w-[100px] truncate">{user?.name || "Profile"}</span>
+                <span className="max-w-[100px] truncate">
+                  {user?.name || "Profile"}
+                </span>
               </NavLink>
+
               <button
                 type="button"
                 onClick={handleLogout}
@@ -153,23 +180,30 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
         <div className="flex md:hidden items-center gap-2">
           <button
             type="button"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            onClick={() => {
-              const next = !isDark;
-              setIsDark(next);
-              setTheme(next ? "dark" : "light");
-            }}
+            aria-label={
+              isDark ? "Switch to light mode" : "Switch to dark mode"
+            }
+            onClick={toggleTheme}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-border-main bg-bg-main dark:bg-card-bg text-text-primary cursor-pointer"
           >
-            {isDark ? <Sun className="h-4 w-4 text-brand-active" /> : <Moon className="h-4 w-4" />}
+            {isDark ? (
+              <Sun className="h-4 w-4 text-brand-active" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </button>
+
           <button
             type="button"
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-text-primary text-bg-main cursor-pointer"
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
@@ -194,6 +228,7 @@ export default function Navbar({ isLoggedIn = false, user = null, onLogout }) {
                   {link.label}
                 </NavLink>
               ))}
+
               {isLoggedIn ? (
                 <button
                   type="button"
