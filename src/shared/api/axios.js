@@ -17,18 +17,19 @@ api.interceptors.request.use((config)=>{
 
 //response api 
 api.interceptors.response.use(
-    (response)=>response,
-    (error)=>{
-        if(error.response?.status === 401){
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
             localStorage.removeItem("token");
-            if(!window.location.pathname.startsWith('/login')){
-                window.history.replaceState(null , "" ,"/login")
-            }
+
+            window.dispatchEvent(
+                new Event("auth:unauthorized")
+            );
         }
 
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
-)
+);
 
 
 export default api ;
