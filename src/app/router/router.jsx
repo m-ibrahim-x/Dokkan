@@ -34,12 +34,13 @@ const withSuspense = (element) => (
 
 export const router = createBrowserRouter([
     {
+        path: "/",
         element: <MainLayout />,
         children: [
 
             // Public Routes
             {
-                path: "/",
+                index: true,
                 element: withSuspense(<HomePage />),
             },
             {

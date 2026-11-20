@@ -1,7 +1,7 @@
 
 import "./loading.css";
 
-const loading = () => {
+const Loading = () => {
     return (
         <main
         className="dokkan-loading"
@@ -189,4 +189,4 @@ const loading = () => {
     );
 }
 
-export default loading;
+export default Loading;

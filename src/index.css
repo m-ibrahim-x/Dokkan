@@ -4,8 +4,9 @@
 
 :root {
   /* Main page background */
-  --theme-bg-main: #f7f2ed;
+  --theme-bg-main: #E2CEBB;
 
+  --theme-bg-nav: #fff;
   /* Cards and section backgrounds */
   --theme-card-bg: #ded8d1;
 
@@ -25,7 +26,7 @@
   --theme-brand-hover: #b08f79;
 
   /* Active navigation and highlighted backgrounds */
-  --theme-active-bg: #ece3db;
+  --theme-active-bg: #DAD1C9;
 
   /* Borders and dividers */
   --theme-border-main: #e4dcd5;
@@ -38,6 +39,21 @@
   --theme-status-warning: #f59e0b;
   --theme-status-danger: #c6604f;
   --theme-status-info: #3b82f6;
+
+  /* Hero palette (migrated from the legacy Dokkan Hero) */
+  --theme-hero-bg-start: #f7efe7;
+  --theme-hero-bg-mid: #f0ddd0;
+  --theme-hero-bg-end: #493c31;
+
+  --theme-hero-accent: #6b5a4c;
+  --theme-hero-accent-hover: #54463b;
+  --theme-hero-accent-soft: #d4b5a0;
+
+  --theme-hero-wallet-start: #a59487;
+  --theme-hero-wallet-mid: #a0846c;
+  --theme-hero-wallet-end: #2a211c;
+  --theme-hero-wallet-rim: #897360;
+  --theme-hero-ink: #120e0c;
 }
 
 .dark {
@@ -76,11 +92,21 @@
   --theme-status-warning: #fbbf24;
   --theme-status-danger: #c6604f;
   --theme-status-info: #60a5fa;
+
+  /* Hero palette (migrated from the legacy Dokkan Hero) */
+  --theme-hero-bg-start: #15130f;
+  --theme-hero-bg-mid: #1c1815;
+  --theme-hero-bg-end: #0d0b09;
+
+  --theme-hero-accent: #e4dace;
+  --theme-hero-accent-hover: #eee6dd;
+  --theme-hero-accent-soft: #d4b5a0;
 }
 
 @theme {
   /* Unified semantic utilities mapped to --theme-* variables */
   --color-bg-main: var(--theme-bg-main);
+  --color-bg-nav: var(--theme-bg-nav);
   --color-card-bg: var(--theme-card-bg);
   --color-input-bg: var(--theme-input-bg);
   --color-text-primary: var(--theme-text-primary);
@@ -96,6 +122,21 @@
   --color-status-warning: var(--theme-status-warning);
   --color-status-danger: var(--theme-status-danger);
   --color-status-info: var(--theme-status-info);
+
+  /* Hero palette (migrated from the legacy Dokkan Hero) */
+  --color-hero-bg-start: var(--theme-hero-bg-start);
+  --color-hero-bg-mid: var(--theme-hero-bg-mid);
+  --color-hero-bg-end: var(--theme-hero-bg-end);
+
+  --color-hero-accent: var(--theme-hero-accent);
+  --color-hero-accent-hover: var(--theme-hero-accent-hover);
+  --color-hero-accent-soft: var(--theme-hero-accent-soft);
+
+  --color-hero-wallet-start: var(--theme-hero-wallet-start);
+  --color-hero-wallet-mid: var(--theme-hero-wallet-mid);
+  --color-hero-wallet-end: var(--theme-hero-wallet-end);
+  --color-hero-wallet-rim: var(--theme-hero-wallet-rim);
+  --color-hero-ink: var(--theme-hero-ink);
 
 }
 

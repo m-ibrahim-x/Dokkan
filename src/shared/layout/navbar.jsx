@@ -75,7 +75,7 @@ export default function Navbar({
         </NavLink>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border-main/60 bg-bg-main/80 dark:bg-card-bg/80 dark:border-border-main p-1.5 backdrop-blur-md shadow-sm transition-colors">
+        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border-main/60 bg-bg-nav dark:bg-card-bg/80 dark:border-border-main p-1.5 backdrop-blur-md shadow-sm transition-colors">
           {navLinks.map((tab) => {
             const isActive = checkIsActive(tab.path);
 

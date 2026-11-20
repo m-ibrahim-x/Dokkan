@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import authContext from "../contexts/authContext";
+import authContext from "../context/authContext";
 
 import {
     authMe,
