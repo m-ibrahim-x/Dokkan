@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import ProductsFilter from "../../services/products/components/productsFilter";
 import useProducts from "../../services/products/hooks/useProducts";
@@ -17,6 +18,7 @@ const INITIAL_FILTERS = {
 const ProductsPage = () => {
     const [filters, setFilters] = useState(INITIAL_FILTERS);
 
+    const navigate = useNavigate();
     const {
         products = [],
         initialLoading,
@@ -94,12 +96,20 @@ const ProductsPage = () => {
                                         : "opacity-100"
                                 }`}
                             >
-                                {products.map((product) => (
-                                    <ProductCard
-                                        key={product.id || product._id}
-                                        product={product}
-                                    />
-                                ))}
+                                {products.map((product) => {
+                                    const productId = product._id || product.id;
+                                    return (
+                                        <ProductCard
+                                            key={productId}
+                                            product={product}
+                                            onViewDetails={() => {
+                                                if (productId) {
+                                                    navigate(`/products/${productId}`);
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
                             </div>
                         ) : (
                             <div className="flex min-h-[300px] flex-col items-center justify-center rounded-3xl border border-border-main bg-card-bg p-8 text-center text-text-secondary">

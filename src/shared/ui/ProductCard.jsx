@@ -1,12 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import { Heart, ShoppingBag, Star } from "lucide-react";
 
 export const ProductCard = ({
   product,
   onAddToCart,
   onToggleWishlist,
+  onViewDetails,
   isWishlisted = false,
   className = "",
 }) => {
+  const navigate = useNavigate();
+
   if (!product) return null;
 
   const {
@@ -18,27 +22,36 @@ export const ProductCard = ({
     averageRating = 0,
     numReviews = 0,
     stock = 0,
-    onViewDetails
   } = product;
 
-  const image = images?.[0]?.url;
+  const productId = product._id || product.id;
+  const image = images?.[0]?.url || (typeof images?.[0] === "string" ? images[0] : "");
   const hasDiscount = discountPrice > 0 && discountPrice < price;
   const discount = hasDiscount ? Math.round(((price - discountPrice) / price) * 100) : 0;
   const inStock = stock > 0;
   const finalPrice = hasDiscount ? discountPrice : price;
   const categoryName = typeof category === "object" && category !== null ? category.name : category;
 
+  const handleCardClick = () => {
+    if (typeof onViewDetails === "function") {
+      onViewDetails(product);
+    } else if (productId) {
+      navigate(`/products/${productId}`);
+    }
+  };
+
   return (
     <article
-    onClick={() => onViewDetails?.(product)}
-    onKeyDown={(e) => {
-      if(e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onViewDetails?.(product);
-      }
-    }}
-    role="link"
-    className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border-main bg-card-bg p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${className}`.trim()}
+      onClick={handleCardClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      tabIndex={0}
+      role="link"
+      className={`group flex h-full flex-col overflow-hidden rounded-3xl border border-border-main bg-card-bg p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer ${className}`.trim()}
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-input-bg">
         {image && (

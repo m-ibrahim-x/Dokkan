@@ -97,7 +97,7 @@ const ProductsSection = ({ products = [] , categories = [] }) => {
             className="[&_.swiper-wrapper]:!ease-linear"
           >
             {products.map((product) => (
-              <SwiperSlide key={product._id} className="h-auto">
+              <SwiperSlide key={product._id || product.id} className="h-auto">
                 <ProductCard product={product} />
               </SwiperSlide>
             ))}
