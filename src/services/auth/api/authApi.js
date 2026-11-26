@@ -1,34 +1,60 @@
-import api from '../../../shared/api/axios';
+import api from "../../../shared/api/axios";
+
+// ==============================
+// Register
+// ==============================
 
 // Send registration OTP
 // payload: { username, email, phone, password, rePassword }
-export const sendRegisterOTP = (payload) =>
-  api.post('/auth/register/send-otp', payload);
+export const sendRegisterOTP = (payload) => {
+    return api.post("/auth/register/send-otp", payload);
+};
 
 // Verify registration OTP
 // payload: { email, otp }
-export const verifyRegisterOTP = (payload) =>
-  api.post('/auth/register/verify-otp', payload);
+export const verifyRegisterOTP = (payload) => {
+    return api.post("/auth/register/verify-otp", payload);
+};
+
+
+// ==============================
+// Login & Logout
+// ==============================
 
 // Login
 // payload: { email, password }
-export const login = (payload) =>
-  api.post('/auth/login', payload);
+export const login = (payload) => {
+    return api.post("/auth/login", payload);
+};
 
 // Logout
-export const logout = () =>
-  api.post('/auth/logout');
+export const logout = () => {
+    return api.post("/auth/logout");
+};
 
-// Forgot password - send OTP
+
+// ==============================
+// Forgot Password
+// ==============================
+
+// Send OTP
 // payload: { email }
-export const forgotPasswordSendOTP = (payload) =>
-  api.post('/auth/forgot-password/send-otp', payload);
+export const forgotPasswordSendOTP = (payload) => {
+    return api.post("/auth/forgot-password/send-otp", payload);
+};
 
-// Forgot password - verify OTP + reset password
+// Verify OTP & Reset Password
 // payload: { email, otp, newPassword }
-export const forgotPasswordVerifyOTP = (payload) =>
-  api.post('/auth/forgot-password/verify-otp', payload);
+export const forgotPasswordVerifyOTP = (payload) => {
+    return api.post("/auth/forgot-password/verify-otp", payload);
+};
 
-// Get current user
-export const authMe = () =>
-  api.get('/auth/me');
+
+// ==============================
+// Current User
+// ==============================
+
+// Get current authenticated user
+export const authMe = () => {
+    return api.get("/auth/me");
+};

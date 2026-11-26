@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,45 +23,28 @@ const AuthProvider = ({ children }) => {
     const [loginLoading, setLoginLoading] = useState(false);
     const [logoutLoading, setLogoutLoading] = useState(false);
 
-    const isAuthenticated = Boolean(user);
+    const isAuthenticated = Boolean(user && token);
+
+
+    // Clear Authentication Session
+    const clearSession = () => {
+        localStorage.removeItem("token");
+
+        setToken(null);
+        setUser(null);
+    };
 
 
     // Check Authentication
     useEffect(() => {
         let ignore = false;
-
-        const fetchUser = async () => {
-            try {
-                const { data } = await authMe();
-
-                if (!ignore) {
-                    setUser(data.user);
-                }
-            } catch (error) {
-                if (!ignore) {
-                    setUser(null);
-
-                    if (error.response?.status === 401) {
-                        setToken(null);
-                    } else {
-                        toast.error(
-                            error.response?.data?.message ||
-                            "Failed to verify authentication. Please try again."
-                        );
-                    }
-                }
-            } finally {
-                if (!ignore) {
-                    setLoading(false);
-                }
-            }
-        };
-
+        let unauthorized = false;
 
         // Handle Unauthorized Requests
         const handleUnauthorized = () => {
-            setUser(null);
-            setToken(null);
+            unauthorized = true;
+
+            clearSession();
             setLoading(false);
         };
 
@@ -68,6 +52,44 @@ const AuthProvider = ({ children }) => {
             "auth:unauthorized",
             handleUnauthorized
         );
+
+        const fetchUser = async () => {
+
+            // No token means guest user
+            const currentToken = localStorage.getItem("token");
+
+            if (!currentToken) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const { data } = await authMe();
+
+                if (!ignore && !unauthorized) {
+                    setUser(data.user);
+                }
+
+            } catch (error) {
+
+                if (!ignore && !unauthorized) {
+
+                    if (error.response?.status === 401) {
+                        clearSession();
+                    } else {
+                        toast.error(
+                            error.response?.data?.message ||
+                            "Failed to verify authentication. Please try again."
+                        );
+                    }
+                }
+
+            } finally {
+                if (!ignore) {
+                    setLoading(false);
+                }
+            }
+        };
 
         fetchUser();
 
@@ -79,6 +101,7 @@ const AuthProvider = ({ children }) => {
                 handleUnauthorized
             );
         };
+
     }, []);
 
 
@@ -113,6 +136,7 @@ const AuthProvider = ({ children }) => {
             setUser(userData);
 
             return data;
+
         } finally {
             setLoginLoading(false);
         }
@@ -125,16 +149,17 @@ const AuthProvider = ({ children }) => {
 
         try {
             await logoutApi();
-        } catch {
-            toast.warning(
-                "Could not confirm logout with the server. Your local session has been cleared."
-            );
+
+        } catch (error) {
+
+            if (error.response?.status !== 401) {
+                toast.warning(
+                    "Could not confirm logout with the server. Your local session has been cleared."
+                );
+            }
+
         } finally {
-            localStorage.removeItem("token");
-
-            setToken(null);
-            setUser(null);
-
+            clearSession();
             setLogoutLoading(false);
         }
     };
@@ -142,7 +167,17 @@ const AuthProvider = ({ children }) => {
 
     return (
         <authContext.Provider
-            value={{ user, token, isAuthenticated, loading, loginLoading, logoutLoading, login, logout, updateUser }}
+            value={{
+                user,
+                token,
+                isAuthenticated,
+                loading,
+                loginLoading,
+                logoutLoading,
+                login,
+                logout,
+                updateUser,
+            }}
         >
             {children}
         </authContext.Provider>

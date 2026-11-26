@@ -13,6 +13,9 @@ const Input = ({
     type = "text",
     value,
     onChange,
+    onBlur,
+    name,
+    ref,
     placeholder = "",
     helperText,
     error,
@@ -117,10 +120,13 @@ const Input = ({
 
                 <input
                     {...props}
+                    ref={ref}
                     id={inputId}
+                    name={name}
                     type={inputType}
                     value={value}
                     onChange={onChange}
+                    onBlur={onBlur}
                     placeholder={placeholder}
                     disabled={disabled}
                     required={required}
