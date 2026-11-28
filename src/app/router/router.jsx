@@ -1,4 +1,3 @@
-
 import { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -16,7 +15,6 @@ import {
     ForgotPasswordPage,
     CartPage,
     WishlistPage,
-    FavoritePage,
     CheckoutPage,
     PaymentPage,
     OrderSuccessPage,
@@ -68,10 +66,6 @@ export const router = createBrowserRouter([
                 element: withSuspense(<ForgotPasswordPage />),
             },
             {
-                path: "/cart",
-                element: withSuspense(<CartPage />),
-            },
-            {
                 path: "/checkout",
                 element: withSuspense(<CheckoutPage />),
             },
@@ -88,25 +82,25 @@ export const router = createBrowserRouter([
                 element: withSuspense(<ProfilePage />),
             },
             {
-                path: "/profile/orders",
-                element: withSuspense(<MyOrdersPage />),
-            },
-            {
                 path: "/profile/orders/:id",
                 element: withSuspense(<OrderDetailsPage />),
             },
 
-            // Protected Routes
+            // Protected Routes (Cart, Wishlist, My Orders)
             {
                 element: <ProtectedRoute />,
                 children: [
+                    {
+                        path: "/cart",
+                        element: withSuspense(<CartPage />),
+                    },
                     {
                         path: "/wishlist",
                         element: withSuspense(<WishlistPage />),
                     },
                     {
-                        path: "/favorite",
-                        element: withSuspense(<FavoritePage />),
+                        path: "/profile/orders",
+                        element: withSuspense(<MyOrdersPage />),
                     },
                 ],
             },

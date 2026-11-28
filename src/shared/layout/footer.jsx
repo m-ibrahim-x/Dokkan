@@ -17,9 +17,9 @@ import Logo from "../ui/logo";
 export default function Footer({ onSocialClick, onNewsletterSubmit }) {
   const footerNavLinks = [
     { label: "Home", path: "/" },
-    { label: "Shop", path: "/products" },
+    { label: "Products", path: "/products" },
     { label: "My Orders", path: "/profile/orders" },
-    { label: "Carts", path: "/cart" },
+    { label: "Cart", path: "/cart" },
     { label: "Wishlist", path: "/wishlist" },
   ];
 

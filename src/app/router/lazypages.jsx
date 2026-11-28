@@ -41,10 +41,6 @@ export const WishlistPage = lazy(() =>
   import("../../pages/wishlistPage")
 );
 
-export const FavoritePage = lazy(() =>
-  import("../../pages/favoritesPage")
-);
-
 // Checkout
 export const CheckoutPage = lazy(() =>
   import("../../pages/checkout/checkoutPage")

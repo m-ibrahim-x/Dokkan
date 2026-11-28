@@ -148,7 +148,8 @@ const AuthProvider = ({ children }) => {
         setLogoutLoading(true);
 
         try {
-            await logoutApi();
+            const { data } = await logoutApi();
+            toast.success(data?.message || "Logged out successfully!");
 
         } catch (error) {
 

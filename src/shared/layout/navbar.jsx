@@ -1,27 +1,34 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Sun, Moon, Menu, X, ArrowUpRight, User } from "lucide-react";
+import { Sun, Moon, Menu, X, ArrowUpRight, User, ChevronDown, Package, Heart, LogOut } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../ui/logo";
 import useTheme from "../hooks/useTheme";
+import useAuth from "../hooks/useAuth";
 
 const navLinks = [
   { label: "Home", path: "/" },
-  { label: "Shop", path: "/products" },
+  { label: "Products", path: "/products" },
   { label: "My Orders", path: "/profile/orders" },
-  { label: "Carts", path: "/cart" },
+  { label: "Cart", path: "/cart" },
   { label: "Wishlist", path: "/wishlist" },
 ];
 
 export default function Navbar({
-  isLoggedIn = false,
-  user = null,
+  isLoggedIn: propIsLoggedIn,
+  user: propUser,
   onLogout,
 }) {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
+  // Use actual authentication state, user, and logout from auth context
+  const { isAuthenticated, user: authUser, logout: authLogout } = useAuth();
+  const isUserAuthenticated = propIsLoggedIn !== undefined ? propIsLoggedIn : isAuthenticated;
+  const currentUser = propUser || authUser;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const location = useLocation();
@@ -30,8 +37,10 @@ export default function Navbar({
   const handleLogout = async () => {
     if (onLogout) {
       await onLogout();
+    } else if (authLogout) {
+      await authLogout();
     }
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -143,26 +152,102 @@ export default function Navbar({
             )}
           </button>
 
-          {/* User Profile / Login */}
-          {isLoggedIn ? (
-            <div className="flex items-center gap-2 rounded-full border border-border-main bg-bg-main/70 dark:bg-card-bg/70 px-4 py-2 text-xs font-semibold text-text-primary shadow-sm">
-              <NavLink
-                to="/profile"
-                className="flex items-center gap-1.5 hover:underline"
-              >
-                <User className="h-3.5 w-3.5 text-brand-active" />
-                <span className="max-w-[100px] truncate">
-                  {user?.name || "Profile"}
-                </span>
-              </NavLink>
-
+          {/* User Profile Dropdown / Login */}
+          {isUserAuthenticated ? (
+            <div className="relative">
               <button
                 type="button"
-                onClick={handleLogout}
-                className="ms-2 text-[11px] text-status-danger hover:underline cursor-pointer"
+                onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                className="flex items-center gap-2 rounded-full border border-border-main bg-bg-main/70 dark:bg-card-bg/70 ps-1 pe-3 py-1 text-xs font-semibold text-text-primary shadow-sm hover:bg-input-bg transition-colors cursor-pointer"
+                aria-expanded={isUserMenuOpen}
+                aria-haspopup="true"
               >
-                Logout
+                {/* Avatar */}
+                <div className="size-7 rounded-full border border-border-main bg-input-bg flex items-center justify-center overflow-hidden shrink-0">
+                  {currentUser?.avatar || currentUser?.image || currentUser?.profilePic ? (
+                    <img
+                      src={currentUser?.avatar || currentUser?.image || currentUser?.profilePic}
+                      alt={currentUser?.username || currentUser?.name || "User"}
+                      className="size-full object-cover"
+                    />
+                  ) : (
+                    <User className="size-3.5 text-brand-active" />
+                  )}
+                </div>
+
+                <span className="max-w-[100px] truncate">
+                  {currentUser?.username || currentUser?.name || "Profile"}
+                </span>
+
+                <ChevronDown
+                  className={`size-3.5 text-text-secondary transition-transform duration-200 ${
+                    isUserMenuOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
+
+              {/* Dropdown Menu */}
+              {isUserMenuOpen && (
+                <div className="absolute end-0 mt-2 w-52 rounded-2xl border border-border-main bg-card-bg shadow-md p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  {/* User Header in Dropdown */}
+                  <div className="px-3 py-2 border-b border-border-main/60 mb-1">
+                    <p className="text-xs font-bold text-text-primary truncate">
+                      {currentUser?.username || currentUser?.name || "User"}
+                    </p>
+                    {currentUser?.email && (
+                      <p className="text-[11px] text-text-secondary truncate mt-0.5" dir="ltr">
+                        {currentUser.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Navigation Links */}
+                  <div className="space-y-0.5">
+                    <NavLink
+                      to="/profile"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-text-primary hover:bg-input-bg transition-colors"
+                    >
+                      <User className="size-3.5 text-brand-active shrink-0" />
+                      <span>Profile</span>
+                    </NavLink>
+
+                    <NavLink
+                      to="/profile/orders"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-text-primary hover:bg-input-bg transition-colors"
+                    >
+                      <Package className="size-3.5 text-brand-active shrink-0" />
+                      <span>My Orders</span>
+                    </NavLink>
+
+                    <NavLink
+                      to="/wishlist"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-text-primary hover:bg-input-bg transition-colors"
+                    >
+                      <Heart className="size-3.5 text-brand-active shrink-0" />
+                      <span>Wishlist</span>
+                    </NavLink>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-border-main/60 my-1" />
+
+                  {/* Logout Action */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsUserMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="flex w-full items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-status-danger hover:bg-status-danger/10 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="size-3.5 shrink-0" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <button
@@ -229,7 +314,7 @@ export default function Navbar({
                 </NavLink>
               ))}
 
-              {isLoggedIn ? (
+              {isUserAuthenticated ? (
                 <button
                   type="button"
                   onClick={() => {
